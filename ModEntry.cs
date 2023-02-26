@@ -13,6 +13,8 @@ namespace MoreForageAndFlowers
     public class ModEntry : Mod
     {
         private static int SALT { get; } = 35714856;
+        //DW already provides these five mushrooms, so skip them
+	private static List<string> dwForage = new List<string>() {"Common Mushroom", "Red Mushroom", "Purple Mushroom", "Chanterelle", "Morel"};
 
 	private Dictionary<string, int> reverseObjectInfo = new Dictionary<string,int>();
 
@@ -81,8 +83,8 @@ namespace MoreForageAndFlowers
                 currentSeed = deepWoodsLocation.Seed;
             }
 
-            // 20% chance (no luck modifier)
-            return currentRandom.NextDouble() < 0.2;
+            // 10% chance (no luck modifier)
+            return currentRandom.NextDouble() < 0.1;
         }
 
 	private void LoadReverseObjectInfo(){
@@ -110,6 +112,10 @@ namespace MoreForageAndFlowers
 		};
 
 		foreach (KeyValuePair<string, string> entry in Game1.objectContextTags){
+			// If the objects is one of the forage DW already provides, skip it
+			if (dwForage.Contains(entry.Key)){
+				continue;
+			}
 			if (entry.Value.Contains("forage_item")){
 				int ix = entry.Value.IndexOf("season_");
 				if (ix != -1){
